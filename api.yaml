@@ -1,0 +1,20 @@
+swagger: "2.0"
+host: localhost
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - http
+info:
+  version: 1.0.0
+  title: Events Beam API
+  description: |-
+    Система управления показом слайдов. Интегрируется с [events.retroscene.org](http://events.retroscene.org)
+
+definitions:
+  SuccessOrError:
+    oneOf:
+    - "$ref": "#/definitions/SuccessMessage"
+    - "$ref": "#/definitions/ErrorMessage"

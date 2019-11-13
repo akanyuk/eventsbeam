@@ -13,32 +13,29 @@ import (
 )
 
 type beam struct {
-	asti     *astilectron.Astilectron
-	windows  map[string]*window
-	basePath string
+	asti    *astilectron.Astilectron
+	windows map[string]*window
 }
 
 type Beamer interface {
 	Init(appName string) error
-	BasePath() string
 	ShowWindow(alias string) error
 	WaitInterrupt()
 }
 
-func NewBeamer(basePath string) Beamer {
+func NewBeamer() Beamer {
 	return &beam{
-		windows:  map[string]*window{},
-		basePath: basePath,
+		windows: map[string]*window{},
 	}
 }
 
 func (b *beam) Init(appName string) error {
 	asti, err := astilectron.New(astilectron.Options{
-		AppName:            appName,
-		BaseDirectoryPath:  b.basePath,
+		AppName: appName,
+		//BaseDirectoryPath:  b.basePath,
 		VersionAstilectron: configuration.Service.VersionAstilectron,
 		VersionElectron:    configuration.Service.VersionElectron,
-		AppIconDefaultPath: filepath.Join(kit.ExecutablePath(), b.basePath, "app", "icon-32x32.png"),
+		AppIconDefaultPath: filepath.Join(kit.ExecutablePath(), "app", "icon-32x32.png"),
 		//AppIconDarwinPath:  "<your .icns icon>", // Same here
 	})
 	if err != nil {
@@ -67,10 +64,6 @@ func (b *beam) Init(appName string) error {
 	}
 
 	return nil
-}
-
-func (b *beam) BasePath() string {
-	return b.basePath
 }
 
 func (b *beam) setDisplay(d int) {

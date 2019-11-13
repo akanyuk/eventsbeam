@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	beamer := beam.NewBeamer("resources")
+	beamer := beam.NewBeamer()
 	if err := beamer.Init("Events Beam"); err != nil {
 		log.Fatalf("unable to initialize beamer: %v\n", err)
 	}

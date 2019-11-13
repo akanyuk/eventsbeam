@@ -3,11 +3,8 @@ package web
 import (
 	"TEST-LOCAL/events_beam/beam"
 	"TEST-LOCAL/events_beam/configuration"
+	"TEST-LOCAL/events_beam/kit"
 	"TEST-LOCAL/events_beam/show"
-
-	_ "TEST-LOCAL/events_beam/web/statik"
-
-	"github.com/rakyll/statik/fs"
 
 	"fmt"
 	"github.com/gorilla/mux"
@@ -40,17 +37,11 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 
 	router.HandleFunc("/setup/slide/create", handler.handleSlideCreate)
 
-	router.PathPrefix("/setup").Handler(http.StripPrefix("/setup", http.FileServer(http.Dir(filepath.Join(beamer.BasePath(), "setup")))))
-
-	// static html with openapi
-	statikFS, err := fs.New()
-	if err != nil {
-		log.Printf("Unable to start statikFS: %s", err)
-	} else {
-		router.PathPrefix("/openapi").Handler(http.StripPrefix("/openapi", http.FileServer(statikFS)))
-	}
-
-	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(filepath.Join(beamer.BasePath(), "control")))))
+	// Static resources
+	router.HandleFunc("/openapi/swagger.json", handleOpenapi)
+	router.PathPrefix("/openapi").Handler(http.StripPrefix("/openapi", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "openapi")))))
+	router.PathPrefix("/setup").Handler(http.StripPrefix("/setup", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "setup")))))
+	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "control")))))
 	http.Handle("/", router)
 
 	fmt.Printf("beam control starting at: %s\n", configuration.Service.BindAddress)
@@ -58,4 +49,9 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 	if err := http.ListenAndServe(configuration.Service.BindAddress, nil); err != nil {
 		log.Fatalf("unable to start control server: %v\n", err)
 	}
+}
+
+func handleOpenapi(w http.ResponseWriter, _ *http.Request) {
+	w.Header().Set("Content-Type", "application/json;charset=utf-8")
+	_, _ = w.Write(swaggerJson)
 }

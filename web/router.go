@@ -1,10 +1,10 @@
 package web
 
 import (
-	"TEST-LOCAL/events_beam/beam"
-	"TEST-LOCAL/events_beam/configuration"
-	"TEST-LOCAL/events_beam/kit"
-	"TEST-LOCAL/events_beam/show"
+	"TEST-LOCAL/events-beam/beam"
+	"TEST-LOCAL/events-beam/configuration"
+	"TEST-LOCAL/events-beam/kit"
+	"TEST-LOCAL/events-beam/show"
 
 	"fmt"
 	"github.com/gorilla/mux"

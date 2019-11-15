@@ -1,7 +1,7 @@
 package show
 
 import (
-	"TEST-LOCAL/events_beam/kit"
+	"TEST-LOCAL/events-beam/kit"
 
 	"path/filepath"
 )

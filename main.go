@@ -1,9 +1,9 @@
 package main
 
 import (
-	"TEST-LOCAL/events_beam/beam"
-	"TEST-LOCAL/events_beam/show"
-	"TEST-LOCAL/events_beam/web"
+	"TEST-LOCAL/events-beam/beam"
+	"TEST-LOCAL/events-beam/show"
+	"TEST-LOCAL/events-beam/web"
 
 	"fmt"
 	"log"
@@ -11,7 +11,7 @@ import (
 
 func main() {
 	beamer := beam.NewBeamer()
-	if err := beamer.Init("Events Beam"); err != nil {
+	if err := beamer.Init("EventsBeam"); err != nil {
 		log.Fatalf("unable to initialize beamer: %v\n", err)
 	}
 
@@ -22,7 +22,7 @@ func main() {
 
 	go web.Start(beamer, shower)
 
-	fmt.Println("events beam started")
+	fmt.Println("eventsbeam started")
 
 	beamer.WaitInterrupt()
 }

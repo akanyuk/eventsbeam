@@ -1,4 +1,4 @@
-module TEST-LOCAL/events_beam
+module TEST-LOCAL/events-beam
 
 require (
 	github.com/BurntSushi/toml v0.3.1

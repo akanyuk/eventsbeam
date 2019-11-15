@@ -1,7 +1,7 @@
 package web
 
 import (
-	"TEST-LOCAL/events_beam/show/config"
+	"TEST-LOCAL/events-beam/show/config"
 	"encoding/json"
 	"log"
 	"net/http"

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"TEST-LOCAL/events_beam/web/response"
+	"TEST-LOCAL/events-beam/web/response"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"

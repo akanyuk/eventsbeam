@@ -1,9 +1,9 @@
 package show
 
 import (
-	"TEST-LOCAL/events_beam/show/config"
-	"TEST-LOCAL/events_beam/show/storage"
-	"TEST-LOCAL/events_beam/web/response"
+	"TEST-LOCAL/events-beam/show/config"
+	"TEST-LOCAL/events-beam/show/storage"
+	"TEST-LOCAL/events-beam/web/response"
 
 	"errors"
 	"path/filepath"

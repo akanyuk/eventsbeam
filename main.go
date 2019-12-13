@@ -1,9 +1,9 @@
 package main
 
 import (
-	"TEST-LOCAL/events-beam/beam"
-	"TEST-LOCAL/events-beam/show"
-	"TEST-LOCAL/events-beam/web"
+	"TEST-LOCAL/eventsbeam/beam"
+	"TEST-LOCAL/eventsbeam/show"
+	"TEST-LOCAL/eventsbeam/web"
 
 	"fmt"
 	"log"

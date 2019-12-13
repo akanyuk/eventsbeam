@@ -1,7 +1,7 @@
 package beam
 
 import (
-	"TEST-LOCAL/events-beam/configuration"
+	"TEST-LOCAL/eventsbeam/configuration"
 	"fmt"
 	"github.com/asticode/go-astilectron"
 	"path/filepath"

@@ -1,13 +1,14 @@
 package web
 
 import (
-	"TEST-LOCAL/events-beam/beam"
-	"TEST-LOCAL/events-beam/configuration"
-	"TEST-LOCAL/events-beam/kit"
-	"TEST-LOCAL/events-beam/show"
+	"TEST-LOCAL/eventsbeam/beam"
+	"TEST-LOCAL/eventsbeam/configuration"
+	"TEST-LOCAL/eventsbeam/kit"
+	"TEST-LOCAL/eventsbeam/show"
+
+	"github.com/gorilla/mux"
 
 	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -43,12 +44,32 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 	router.PathPrefix("/setup").Handler(http.StripPrefix("/setup", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "setup")))))
 	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "control")))))
 	http.Handle("/", router)
+	router.Use(handleMiddleware)
 
 	fmt.Printf("beam control starting at: %s\n", configuration.Service.BindAddress)
 
 	if err := http.ListenAndServe(configuration.Service.BindAddress, nil); err != nil {
 		log.Fatalf("unable to start control server: %v\n", err)
 	}
+}
+
+func handleMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		headers := w.Header()
+		headers.Add("Access-Control-Allow-Origin", "*")
+
+		if r.Method == "OPTIONS" {
+			headers.Add("Vary", "Origin")
+			headers.Add("Vary", "Access-Control-Request-Method")
+			headers.Add("Vary", "Access-Control-Request-Headers")
+			headers.Add("Access-Control-Allow-Headers", "Content-Type, Origin, Accept, token")
+			headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 func handleOpenapi(w http.ResponseWriter, _ *http.Request) {

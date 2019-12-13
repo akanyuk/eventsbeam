@@ -1,10 +1,11 @@
-module TEST-LOCAL/events-beam
+module TEST-LOCAL/eventsbeam
 
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/asticode/go-astilectron v0.9.0
 	github.com/asticode/go-astilog v1.1.0 // indirect
 	github.com/asticode/go-astitools v1.2.0 // indirect
+	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.3
 	github.com/jinzhu/configor v1.1.1
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect

@@ -12,9 +12,3 @@ info:
   title: Events Beam API
   description: |-
     Система управления показом слайдов. Интегрируется с [events.retroscene.org](http://events.retroscene.org)
-
-definitions:
-  SuccessOrError:
-    oneOf:
-    - "$ref": "#/definitions/SuccessMessage"
-    - "$ref": "#/definitions/ErrorMessage"

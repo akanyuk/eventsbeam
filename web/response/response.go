@@ -11,12 +11,14 @@ import (
 type SuccessMessage struct {
 	// Статус операции
 	// Required: true
-	// Enum: true
 	Success bool `json:"success"`
 	// Text сообщения
 	// Required: true
 	// Example: Операция завершена успешно
 	Message string `json:"message"`
+	// Детализированный массив ошибок. Возвращается при success=false (partial error)
+	// Required: true
+	Errors []ErrorItem `json:"errors"`
 	// Объект возвращаемых данных. Если данных нет, то возвращает `null`
 	// Required: true
 	Payload interface{} `json:"payload"`

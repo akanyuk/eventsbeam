@@ -20,7 +20,7 @@ type compo struct {
 
 type Comper interface {
 	Init() error
-	Validate(config.Compo) []response.ErrorItem
+	Validate(config.Compo, config.Compo) []response.ErrorItem
 	Compos() []config.Compo
 	Create(config.Compo) error
 	Read(string) (config.Compo, error)
@@ -48,12 +48,12 @@ func (c *compo) Init() error {
 	return nil
 }
 
-func (c *compo) Validate(compo config.Compo) []response.ErrorItem {
+func (c *compo) Validate(compo config.Compo, oldCompo config.Compo) []response.ErrorItem {
 	errorItems := make([]response.ErrorItem, 0)
 
 	if compo.Alias == "" {
 		errorItems = append(errorItems, response.ErrorItem{Code: "alias", Message: "alias can not be empty"})
-	} else {
+	} else if compo.Alias != oldCompo.Alias {
 		_, exist := c.getCompo(compo.Alias)
 		if exist {
 			errorItems = append(errorItems, response.ErrorItem{Code: "alias", Message: "alias already exists"})

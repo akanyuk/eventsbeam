@@ -1,6 +1,7 @@
 package web
 
 import (
+	"TEST-LOCAL/eventsbeam/show/config"
 	"TEST-LOCAL/eventsbeam/web/response"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -45,7 +46,7 @@ func (h *handler) handleCompos(w http.ResponseWriter, r *http.Request) {
 //   '200':
 //     description: success
 //     schema:
-//       "$ref": "#/definitions/SuccessOrError"
+//       "$ref": "#/definitions/SuccessMessage"
 //     examples:
 //       application/json: {"success":false,"message":"validation error","errors":[{"code":"alias","message":"alias already exists"},{"code":"title","message":"title can not be empty"}]}
 //   '400':
@@ -67,7 +68,7 @@ func (h *handler) handleCompoCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validationErrors := h.shower.Comper().Validate(compo)
+	validationErrors := h.shower.Comper().Validate(compo, config.Compo{})
 	if len(validationErrors) > 0 {
 		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
 		return
@@ -147,7 +148,7 @@ func (h *handler) handleCompoRead(w http.ResponseWriter, r *http.Request) {
 //   '200':
 //     description: success
 //     schema:
-//       "$ref": "#/definitions/SuccessOrError"
+//       "$ref": "#/definitions/SuccessMessage"
 //     examples:
 //       application/json: {"success":false,"message":"validation error","errors":[{"code":"alias","message":"alias already exists"},{"code":"title","message":"title can not be empty"}]}
 //   '400':
@@ -176,13 +177,13 @@ func (h *handler) handleCompoUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	alias := mux.Vars(r)["alias"]
-	_, err = h.shower.Comper().Read(alias)
+	oldCompo, err := h.shower.Comper().Read(alias)
 	if err != nil {
 		response.WriteErrorResponse(w, http.StatusNotFound, nil, err.Error())
 		return
 	}
 
-	validationErrors := h.shower.Comper().Validate(compo)
+	validationErrors := h.shower.Comper().Validate(compo, oldCompo)
 	if len(validationErrors) > 0 {
 		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
 		return

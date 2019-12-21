@@ -17,11 +17,11 @@ import (
 //     description: success
 //     schema:
 //       type: array
-//       description: Массив всех компо
+//       description: Массив всех шаблонов
 //       items:
-//         "$ref": "#/definitions/Compo"
+//         "$ref": "#/definitions/Template"
 //     examples:
-//       application/json: [ { "alias": "zxdemo", "title": "ZX Spectrum demo", "slides": [] }, { "alias": "intro", "title": "ZX Spectrum 256 bytes intro", "slides": [] } ]
+//       application/json: [ { "name": "picture" }, { "name": "ascii" }, { "name": "prizegiving" } ]
 func (h *handler) handleTemplates(w http.ResponseWriter, r *http.Request) {
-	response.WriteDataResponse(w, h.shower.Comper().Compos())
+	response.WriteDataResponse(w, h.beamer.Templates())
 }

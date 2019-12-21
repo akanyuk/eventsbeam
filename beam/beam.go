@@ -1,10 +1,13 @@
 package beam
 
 import (
+	"TEST-LOCAL/eventsbeam/beam/config"
 	"TEST-LOCAL/eventsbeam/configuration"
 	"TEST-LOCAL/eventsbeam/kit"
-	"fmt"
+
 	"github.com/asticode/go-astilectron"
+
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -13,14 +16,16 @@ import (
 )
 
 type beam struct {
-	asti    *astilectron.Astilectron
-	windows map[string]*window
+	asti      *astilectron.Astilectron
+	windows   map[string]*window
+	templater Templater
 }
 
 type Beamer interface {
 	Init(appName string) error
 	ShowWindow(alias string) error
 	WaitInterrupt()
+	Templates() []config.Template
 }
 
 func NewBeamer() Beamer {
@@ -48,13 +53,13 @@ func (b *beam) Init(appName string) error {
 		return err
 	}
 
-	templates, err := getTemplates(filepath.Join(b.asti.Paths().BaseDirectory(), "templates"))
-	if err != nil {
+	b.templater = NewTemplater(filepath.Join(b.asti.Paths().BaseDirectory(), "templates"))
+	if err := b.templater.Init(); err != nil {
 		return err
 	}
 
-	for _, template := range templates {
-		if err := b.addWindow(template); err != nil {
+	for _, template := range b.Templates() {
+		if err := b.addWindow(template.Name); err != nil {
 			return err
 		}
 	}
@@ -64,6 +69,42 @@ func (b *beam) Init(appName string) error {
 	}
 
 	return nil
+}
+
+func (b *beam) Templates() []config.Template {
+	return b.templater.Templates()
+}
+
+func (b *beam) ShowWindow(alias string) error {
+	w, exist := b.windows[alias]
+	if !exist {
+		return fmt.Errorf("window not found: %s", alias)
+	}
+
+	for a := range b.windows {
+		b.windows[a].isActive = false
+	}
+
+	if err := w.show(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (b *beam) WaitInterrupt() {
+	// Waiting exit signal
+	s := make(chan os.Signal, 1)
+	signal.Notify(s, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-s
+
+		_ = b.asti.Quit()
+		os.Exit(0)
+	}()
+
+	defer b.asti.Close()
+	b.asti.Wait()
 }
 
 func (b *beam) setDisplay(d int) {
@@ -97,36 +138,4 @@ func (b *beam) addWindow(alias string) error {
 	b.windows[alias] = w
 
 	return nil
-}
-
-func (b *beam) ShowWindow(alias string) error {
-	w, exist := b.windows[alias]
-	if !exist {
-		return fmt.Errorf("window not found: %s", alias)
-	}
-
-	for a := range b.windows {
-		b.windows[a].isActive = false
-	}
-
-	if err := w.show(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (b *beam) WaitInterrupt() {
-	// Waiting exit signal
-	s := make(chan os.Signal, 1)
-	signal.Notify(s, syscall.SIGINT, syscall.SIGTERM)
-	go func() {
-		<-s
-
-		_ = b.asti.Quit()
-		os.Exit(0)
-	}()
-
-	defer b.asti.Close()
-	b.asti.Wait()
 }

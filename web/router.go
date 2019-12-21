@@ -36,6 +36,8 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 	router.HandleFunc("/setup/compo/update/{alias}", handler.handleCompoUpdate)
 	router.HandleFunc("/setup/compo/delete/{alias}", handler.handleCompoDelete)
 
+	router.HandleFunc("/setup/templates", handler.handleTemplates)
+
 	router.HandleFunc("/setup/slide/create", handler.handleSlideCreate)
 
 	// Static resources

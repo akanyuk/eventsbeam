@@ -2,16 +2,12 @@ package config
 
 //swagger:model
 type Slide struct {
+	Position int `json:"-"`
 	// Идентификатор слайда
 	// Readonly: true
 	// Min: 1
 	// Example: 1
 	ID int `json:"id"`
-	// Позиция при сортировке
-	// Readonly: true
-	// Min: 1
-	// Example: 1
-	Position int `json:"position"`
 	// Идентификатор компо. Если не указано, то используется глобальный список слайдов.
 	// Example: zxdemo
 	Compo string `json:"compo"`

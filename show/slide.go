@@ -26,7 +26,7 @@ type Slider interface {
 	Slides(compo string) []config.Slide
 	Validate(config.Slide) []response.ErrorItem
 	Create(config.Slide) error
-	//Read(string) (config.Compo, error)
+	Read(int) (config.Slide, error)
 	//Update(alias string, compo config.Compo) error
 	//Delete(alias string) error
 }
@@ -63,6 +63,15 @@ func (s *slide) Slides(compo string) []config.Slide {
 	}
 
 	return slides
+}
+
+func (s *slide) Read(id int) (config.Slide, error) {
+	slide, exist := s.getSlide(id)
+	if !exist {
+		return config.Slide{}, errors.New("slide not found")
+	}
+
+	return slide, nil
 }
 
 func (s *slide) Validate(slide config.Slide) []response.ErrorItem {

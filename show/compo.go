@@ -52,6 +52,15 @@ func (c *compo) Compos() []config.Compo {
 	return c.compos
 }
 
+func (c *compo) Read(alias string) (config.Compo, error) {
+	compo, exist := c.getCompo(alias)
+	if !exist {
+		return config.Compo{}, errors.New("compo not found")
+	}
+
+	return compo, nil
+}
+
 func (c *compo) Validate(compo config.Compo, oldCompo config.Compo) []response.ErrorItem {
 	errorItems := make([]response.ErrorItem, 0)
 
@@ -68,15 +77,6 @@ func (c *compo) Validate(compo config.Compo, oldCompo config.Compo) []response.E
 	}
 
 	return errorItems
-}
-
-func (c *compo) Read(alias string) (config.Compo, error) {
-	compo, exist := c.getCompo(alias)
-	if !exist {
-		return config.Compo{}, errors.New("compo not found")
-	}
-
-	return compo, nil
 }
 
 func (c *compo) Create(compo config.Compo) error {

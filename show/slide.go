@@ -1,6 +1,7 @@
 package show
 
 import (
+	"TEST-LOCAL/eventsbeam/beam"
 	"TEST-LOCAL/eventsbeam/show/config"
 	"TEST-LOCAL/eventsbeam/show/storage"
 	"TEST-LOCAL/eventsbeam/web/response"
@@ -14,6 +15,8 @@ type slide struct {
 	sync.RWMutex
 	slides     []config.Slide
 	configPath string
+
+	beamer beam.Beamer
 }
 
 type Slider interface {
@@ -26,9 +29,10 @@ type Slider interface {
 	//Delete(alias string) error
 }
 
-func NewSlider(basePath string) Slider {
+func NewSlider(basePath string, beamer beam.Beamer) Slider {
 	return &slide{
 		configPath: filepath.Join(basePath, slideConfigFileName),
+		beamer:     beamer,
 	}
 }
 
@@ -49,16 +53,10 @@ func (s *slide) Init() error {
 func (s *slide) Validate(slide config.Slide, oldSlide config.Slide) []response.ErrorItem {
 	errorItems := make([]response.ErrorItem, 0)
 
-	if slide.ID < 1 {
-		errorItems = append(errorItems, response.ErrorItem{Code: "id", Message: "wrong slide ID"})
-	} else if slide.ID != oldSlide.ID {
-		_, exist := s.getSlide(slide.ID)
-		if exist {
-			errorItems = append(errorItems, response.ErrorItem{Code: "id", Message: "ID already exists"})
-		}
+	_, exist := s.beamer.Template(slide.Template)
+	if !exist {
+		errorItems = append(errorItems, response.ErrorItem{Code: "template", Message: "template not found"})
 	}
-
-	// TODO: check compo and template exist
 
 	return errorItems
 }

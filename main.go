@@ -16,7 +16,7 @@ func main() {
 	}
 
 	shower := show.NewShower("")
-	if err := shower.Init(); err != nil {
+	if err := shower.Init(beamer); err != nil {
 		log.Fatalf("unable to initialize shower: %v\n", err)
 	}
 

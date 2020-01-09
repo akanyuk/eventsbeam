@@ -1,6 +1,7 @@
 package show
 
 import (
+	"TEST-LOCAL/eventsbeam/beam"
 	"TEST-LOCAL/eventsbeam/kit"
 
 	"path/filepath"
@@ -13,7 +14,7 @@ type show struct {
 }
 
 type Shower interface {
-	Init() error
+	Init(beamer beam.Beamer) error
 	Comper() Comper
 	Slider() Slider
 }
@@ -24,13 +25,13 @@ func NewShower(basePath string) Shower {
 	}
 }
 
-func (s *show) Init() error {
+func (s *show) Init(beamer beam.Beamer) error {
 	s.comper = NewComper(s.basePath)
 	if err := s.comper.Init(); err != nil {
 		return err
 	}
 
-	s.slider = NewSlider(s.basePath)
+	s.slider = NewSlider(s.basePath, beamer)
 	if err := s.slider.Init(); err != nil {
 		return err
 	}

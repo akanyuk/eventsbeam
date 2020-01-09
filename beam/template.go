@@ -16,6 +16,7 @@ type template struct {
 type Templater interface {
 	Init() error
 	Templates() []config.Template
+	Get(name string) (config.Template, bool)
 }
 
 func NewTemplater(baseDir string) Templater {
@@ -45,6 +46,19 @@ func (t *template) Init() error {
 
 func (t *template) Templates() []config.Template {
 	return t.templates
+}
+
+func (t *template) Get(name string) (config.Template, bool) {
+	t.Lock()
+	defer t.Unlock()
+
+	for _, template := range t.templates {
+		if template.Name == name {
+			return template, true
+		}
+	}
+
+	return config.Template{}, false
 }
 
 func getTemplates(dir string) ([]string, error) {

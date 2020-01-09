@@ -54,8 +54,7 @@ func (c *compo) Validate(compo config.Compo, oldCompo config.Compo) []response.E
 	if compo.Alias == "" {
 		errorItems = append(errorItems, response.ErrorItem{Code: "alias", Message: "alias can not be empty"})
 	} else if compo.Alias != oldCompo.Alias {
-		_, exist := c.getCompo(compo.Alias)
-		if exist {
+		if _, exist := c.getCompo(compo.Alias); exist {
 			errorItems = append(errorItems, response.ErrorItem{Code: "alias", Message: "alias already exists"})
 		}
 	}
@@ -81,9 +80,8 @@ func (c *compo) Read(alias string) (config.Compo, error) {
 }
 
 func (c *compo) Create(compo config.Compo) error {
-	_, exist := c.getCompo(compo.Alias)
-	if exist {
-		return errors.New("alias already exist")
+	if _, exist := c.getCompo(compo.Alias); exist {
+		return errors.New("compo already exist")
 	}
 
 	c.Lock()
@@ -98,9 +96,8 @@ func (c *compo) Create(compo config.Compo) error {
 }
 
 func (c *compo) Update(alias string, updatedCompo config.Compo) error {
-	_, exist := c.getCompo(alias)
-	if !exist {
-		return errors.New("not found")
+	if _, exist := c.getCompo(alias); !exist {
+		return errors.New("compo not found")
 	}
 
 	c.Lock()
@@ -120,9 +117,8 @@ func (c *compo) Update(alias string, updatedCompo config.Compo) error {
 }
 
 func (c *compo) Delete(alias string) error {
-	_, exist := c.getCompo(alias)
-	if !exist {
-		return errors.New("not found")
+	if _, exist := c.getCompo(alias); !exist {
+		return errors.New("compo not found")
 	}
 
 	c.Lock()

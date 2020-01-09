@@ -5,11 +5,12 @@ import (
 	"TEST-LOCAL/eventsbeam/show/config"
 	"TEST-LOCAL/eventsbeam/show/storage"
 	"TEST-LOCAL/eventsbeam/web/response"
+	"errors"
 	"path/filepath"
 	"sync"
 )
 
-const slideConfigFileName = "compo.yaml"
+const slideConfigFileName = "slide.yaml"
 
 type slide struct {
 	sync.RWMutex
@@ -22,9 +23,9 @@ type slide struct {
 
 type Slider interface {
 	Init() error
-	Validate(config.Slide, config.Slide) []response.ErrorItem
+	Validate(config.Slide) []response.ErrorItem
 	//Compos() []config.Compo
-	//Create(config.Slide) error
+	Create(config.Slide) error
 	//Read(string) (config.Compo, error)
 	//Update(alias string, compo config.Compo) error
 	//Delete(alias string) error
@@ -52,7 +53,7 @@ func (s *slide) Init() error {
 	return nil
 }
 
-func (s *slide) Validate(slide config.Slide, oldSlide config.Slide) []response.ErrorItem {
+func (s *slide) Validate(slide config.Slide) []response.ErrorItem {
 	errorItems := make([]response.ErrorItem, 0)
 
 	if _, err := s.beamer.TemplateRead(slide.Template); err != nil {
@@ -66,6 +67,25 @@ func (s *slide) Validate(slide config.Slide, oldSlide config.Slide) []response.E
 	return errorItems
 }
 
+func (s *slide) Create(slide config.Slide) error {
+	if _, exist := s.getSlide(slide.ID); exist {
+		return errors.New("slide already exist")
+	}
+
+	slide.ID = s.nextID()
+	slide.Position = s.nextPosition(slide.Compo)
+	s.slides = append(s.slides, slide)
+
+	s.Lock()
+	defer s.Unlock()
+
+	if err := storage.SaveSlides(s.slides, s.configPath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *slide) getSlide(id int) (config.Slide, bool) {
 	s.Lock()
 	defer s.Unlock()
@@ -77,4 +97,34 @@ func (s *slide) getSlide(id int) (config.Slide, bool) {
 	}
 
 	return config.Slide{}, false
+}
+
+func (s *slide) nextID() int {
+	s.Lock()
+	defer s.Unlock()
+
+	id := 1
+
+	for _, slide := range s.slides {
+		if slide.ID >= id {
+			id = slide.ID + 1
+		}
+	}
+
+	return id
+}
+
+func (s *slide) nextPosition(compo string) int {
+	s.Lock()
+	defer s.Unlock()
+
+	position := 1
+
+	for _, slide := range s.slides {
+		if slide.Compo == compo && slide.Position >= position {
+			position = slide.Position + 1
+		}
+	}
+
+	return position
 }

@@ -84,3 +84,28 @@ func LoadSlides(configPath string) ([]config.Slide, error) {
 
 	return slides, nil
 }
+
+func SaveSlides(slides []config.Slide, configPath string) error {
+	data, err := yaml.Marshal(slides)
+	if err != nil {
+		return err
+	}
+
+	f, err := os.Create(configPath)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Printf("slides saving error: %v", err)
+		}
+	}()
+
+	_, err = f.Write(data)
+	if err != nil {
+		return err
+	}
+
+	return f.Sync()
+}

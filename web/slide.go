@@ -1,10 +1,7 @@
 package web
 
 import (
-	"TEST-LOCAL/eventsbeam/show/config"
 	"TEST-LOCAL/eventsbeam/web/response"
-	"fmt"
-
 	"net/http"
 )
 
@@ -41,14 +38,16 @@ func (h *handler) handleSlideCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validationErrors := h.shower.Slider().Validate(slide, config.Slide{})
+	validationErrors := h.shower.Slider().Validate(slide)
 	if len(validationErrors) > 0 {
 		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
 		return
 	}
 
-	// TODO: add logic for create
-	fmt.Printf("\033[1;35m slide: %#v\033[0m\n", slide)
+	if err := h.shower.Slider().Create(slide); err != nil {
+		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
+		return
+	}
 
 	response.WriteSuccessResponse(w, nil, "slide created")
 }

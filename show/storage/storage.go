@@ -11,18 +11,7 @@ import (
 )
 
 func LoadCompos(configPath string) ([]config.Compo, error) {
-	f, err := os.Open(configPath)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		if err := f.Close(); err != nil {
-			log.Printf("compos loading error: %v", err)
-		}
-	}()
-
-	bytes, err := ioutil.ReadAll(f)
+	bytes, err := loadData(configPath)
 	if err != nil {
 		return nil, err
 	}
@@ -41,38 +30,11 @@ func SaveCompos(compos []config.Compo, configPath string) error {
 		return err
 	}
 
-	f, err := os.Create(configPath)
-	if err != nil {
-		return err
-	}
-
-	defer func() {
-		if err := f.Close(); err != nil {
-			log.Printf("compos saving error: %v", err)
-		}
-	}()
-
-	_, err = f.Write(data)
-	if err != nil {
-		return err
-	}
-
-	return f.Sync()
+	return saveData(data, configPath)
 }
 
 func LoadSlides(configPath string) ([]config.Slide, error) {
-	f, err := os.Open(configPath)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		if err := f.Close(); err != nil {
-			log.Printf("slides loading error: %v", err)
-		}
-	}()
-
-	bytes, err := ioutil.ReadAll(f)
+	bytes, err := loadData(configPath)
 	if err != nil {
 		return nil, err
 	}
@@ -91,14 +53,38 @@ func SaveSlides(slides []config.Slide, configPath string) error {
 		return err
 	}
 
-	f, err := os.Create(configPath)
+	return saveData(data, configPath)
+}
+
+func loadData(filePath string) ([]byte, error) {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Printf("file loading error: %v", err)
+		}
+	}()
+
+	bytes, err := ioutil.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes, nil
+}
+
+func saveData(data []byte, filePath string) error {
+	f, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
 
 	defer func() {
 		if err := f.Close(); err != nil {
-			log.Printf("slides saving error: %v", err)
+			log.Printf("file error: %v", err)
 		}
 	}()
 

@@ -27,7 +27,7 @@ type Slider interface {
 	Validate(config.Slide) []response.ErrorItem
 	Create(config.Slide) error
 	Read(int) (config.Slide, error)
-	//Update(alias string, compo config.Compo) error
+	Update(id int, slide config.Slide) error
 	//Delete(alias string) error
 }
 
@@ -101,6 +101,29 @@ func (s *slide) Create(slide config.Slide) error {
 
 	s.Lock()
 	defer s.Unlock()
+
+	if err := storage.SaveSlides(s.slides, s.configPath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *slide) Update(id int, updatedSlide config.Slide) error {
+	if _, exist := s.getSlide(id); !exist {
+		return errors.New("slide not found")
+	}
+
+	updatedSlide.ID = id
+
+	s.Lock()
+	defer s.Unlock()
+
+	for key, item := range s.slides {
+		if item.ID == id {
+			s.slides[key] = updatedSlide
+		}
+	}
 
 	if err := storage.SaveSlides(s.slides, s.configPath); err != nil {
 		return err

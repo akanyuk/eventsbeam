@@ -172,7 +172,7 @@ func (h *handler) handleCompoRead(w http.ResponseWriter, r *http.Request) {
 func (h *handler) handleCompoUpdate(w http.ResponseWriter, r *http.Request) {
 	compo, err := ExtractCompo(r)
 	if err != nil {
-		response.WriteErrorResponse(w, http.StatusBadRequest, nil, err.Error())
+		response.WriteErrorResponse(w, http.StatusBadRequest, nil, "wrong request params: %v", err.Error())
 		return
 	}
 

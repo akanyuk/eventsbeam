@@ -136,3 +136,73 @@ func (h *handler) handleSlideRead(w http.ResponseWriter, r *http.Request) {
 
 	response.WriteSuccessResponse(w, compo, "success")
 }
+
+// swagger:operation POST /setup/slide/update/{id} slide handleSlideUpdate
+// Update slide
+//
+// Редактирование слайда.
+// ---
+// parameters:
+//   - name: id
+//     in: path
+//     type: int
+//     required: true
+//     description: Идентификатор слайда
+//   - name: params
+//     in: body
+//     description: Свойства слайда
+//     schema:
+//       "$ref": "#/definitions/Slide"
+// produces:
+//   - application/json
+// responses:
+//   '200':
+//     description: success
+//     schema:
+//       "$ref": "#/definitions/SuccessMessage"
+//     examples:
+//       application/json: {"success":false,"message":"validation error","errors":[{"code":"alias","message":"alias already exists"},{"code":"title","message":"title can not be empty"}]}
+//   '400':
+//     description: bad request
+//     schema:
+//       "$ref": "#/definitions/ErrorMessage"
+//     examples:
+//       application/json: { "success": false, "message": "can not extract slide", "errors": { } }
+//   '404':
+//     description: not found
+//     schema:
+//       "$ref": "#/definitions/ErrorMessage"
+//     examples:
+//       application/json: { "success": false, "message": "slide not found", "errors": { } }
+//   '500':
+//     description: internal error
+//     schema:
+//       "$ref": "#/definitions/ErrorMessage"
+//     examples:
+//       application/json: { "success": false, "message": "unable to save slide", "errors": { } }
+func (h *handler) handleSlideUpdate(w http.ResponseWriter, r *http.Request) {
+	slide, err := ExtractSlide(r)
+	if err != nil {
+		response.WriteErrorResponse(w, http.StatusBadRequest, nil, "wrong request params: %v", err.Error())
+		return
+	}
+
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		response.WriteErrorResponse(w, http.StatusBadRequest, nil, "wrong slide ID: %v", err.Error())
+		return
+	}
+
+	validationErrors := h.shower.Slider().Validate(slide)
+	if len(validationErrors) > 0 {
+		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
+		return
+	}
+
+	if err := h.shower.Slider().Update(id, slide); err != nil {
+		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
+		return
+	}
+
+	response.WriteSuccessResponse(w, nil, "slide updated")
+}

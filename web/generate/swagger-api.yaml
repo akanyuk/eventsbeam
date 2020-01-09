@@ -9,6 +9,7 @@ schemes:
   - http
 info:
   version: 1.0.0
-  title: Events Beam API
+  title: EventsBeam API
   description: |-
+    # EventsBeam
     Система управления показом слайдов. Интегрируется с [events.retroscene.org](http://events.retroscene.org)

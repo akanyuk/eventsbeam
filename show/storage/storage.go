@@ -18,7 +18,7 @@ func LoadCompos(configPath string) ([]config.Compo, error) {
 
 	defer func() {
 		if err := f.Close(); err != nil {
-			log.Printf("show loading error: %v", err)
+			log.Printf("compos loading error: %v", err)
 		}
 	}()
 
@@ -48,7 +48,7 @@ func SaveCompos(compos []config.Compo, configPath string) error {
 
 	defer func() {
 		if err := f.Close(); err != nil {
-			log.Printf("show saving error: %v", err)
+			log.Printf("compos saving error: %v", err)
 		}
 	}()
 
@@ -58,4 +58,29 @@ func SaveCompos(compos []config.Compo, configPath string) error {
 	}
 
 	return f.Sync()
+}
+
+func LoadSlides(configPath string) ([]config.Slide, error) {
+	f, err := os.Open(configPath)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Printf("slides loading error: %v", err)
+		}
+	}()
+
+	bytes, err := ioutil.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+
+	slides := make([]config.Slide, 0)
+	if err = yaml.Unmarshal(bytes, &slides); err != nil {
+		return nil, err
+	}
+
+	return slides, nil
 }

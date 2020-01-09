@@ -7,6 +7,11 @@ type Slide struct {
 	// Min: 1
 	// Example: 1
 	ID int `json:"id"`
+	// Позиция при сортировке
+	// Readonly: true
+	// Min: 1
+	// Example: 1
+	Position int `json:"position"`
 	// Идентификатор компо. Если не указано, то используется глобальный список слайдов.
 	// Example: zxdemo
 	Compo string `json:"compo"`
@@ -14,7 +19,7 @@ type Slide struct {
 	// Required: true
 	// Example: ansi
 	Template string `json:"template"`
-	// Параметры, передаваемые в шаблон
+	// Параметры, передаваемые в шаблон при отображении слайда
 	// Example: { "title": "Super demo", "platform": "ZX Spectrum" }
 	Params map[string]string `json:"params"`
 }

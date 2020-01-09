@@ -27,7 +27,7 @@ type Beamer interface {
 	WaitInterrupt()
 
 	Templates() []config.Template
-	Template(name string) (config.Template, bool)
+	TemplateRead(name string) (config.Template, error)
 }
 
 func NewBeamer() Beamer {
@@ -77,8 +77,8 @@ func (b *beam) Templates() []config.Template {
 	return b.templater.Templates()
 }
 
-func (b *beam) Template(name string) (config.Template, bool) {
-	return b.templater.Get(name)
+func (b *beam) TemplateRead(name string) (config.Template, error) {
+	return b.templater.Read(name)
 }
 
 func (b *beam) ShowWindow(alias string) error {

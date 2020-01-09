@@ -74,7 +74,7 @@ func (c *compo) Compos() []config.Compo {
 func (c *compo) Read(alias string) (config.Compo, error) {
 	compo, exist := c.getCompo(alias)
 	if !exist {
-		return config.Compo{}, errors.New("not found")
+		return config.Compo{}, errors.New("compo not found")
 	}
 
 	return compo, nil

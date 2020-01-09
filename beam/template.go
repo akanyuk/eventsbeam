@@ -2,6 +2,7 @@ package beam
 
 import (
 	"TEST-LOCAL/eventsbeam/beam/config"
+	"errors"
 
 	"io/ioutil"
 	"sync"
@@ -16,7 +17,7 @@ type template struct {
 type Templater interface {
 	Init() error
 	Templates() []config.Template
-	Get(name string) (config.Template, bool)
+	Read(name string) (config.Template, error)
 }
 
 func NewTemplater(baseDir string) Templater {
@@ -48,17 +49,17 @@ func (t *template) Templates() []config.Template {
 	return t.templates
 }
 
-func (t *template) Get(name string) (config.Template, bool) {
+func (t *template) Read(name string) (config.Template, error) {
 	t.Lock()
 	defer t.Unlock()
 
 	for _, template := range t.templates {
 		if template.Name == name {
-			return template, true
+			return template, nil
 		}
 	}
 
-	return config.Template{}, false
+	return config.Template{}, errors.New("template not found")
 }
 
 func getTemplates(dir string) ([]string, error) {

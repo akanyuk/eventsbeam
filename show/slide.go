@@ -17,6 +17,7 @@ type slide struct {
 	configPath string
 
 	beamer beam.Beamer
+	comper Comper
 }
 
 type Slider interface {
@@ -29,10 +30,11 @@ type Slider interface {
 	//Delete(alias string) error
 }
 
-func NewSlider(basePath string, beamer beam.Beamer) Slider {
+func NewSlider(basePath string, beamer beam.Beamer, comper Comper) Slider {
 	return &slide{
 		configPath: filepath.Join(basePath, slideConfigFileName),
 		beamer:     beamer,
+		comper:     comper,
 	}
 }
 
@@ -53,9 +55,12 @@ func (s *slide) Init() error {
 func (s *slide) Validate(slide config.Slide, oldSlide config.Slide) []response.ErrorItem {
 	errorItems := make([]response.ErrorItem, 0)
 
-	_, exist := s.beamer.Template(slide.Template)
-	if !exist {
-		errorItems = append(errorItems, response.ErrorItem{Code: "template", Message: "template not found"})
+	if _, err := s.beamer.TemplateRead(slide.Template); err != nil {
+		errorItems = append(errorItems, response.ErrorItem{Code: "template", Message: err.Error()})
+	}
+
+	if _, err := s.comper.Read(slide.Compo); err != nil {
+		errorItems = append(errorItems, response.ErrorItem{Code: "compo", Message: err.Error()})
 	}
 
 	return errorItems

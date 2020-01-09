@@ -31,7 +31,7 @@ func (s *show) Init(beamer beam.Beamer) error {
 		return err
 	}
 
-	s.slider = NewSlider(s.basePath, beamer)
+	s.slider = NewSlider(s.basePath, beamer, s.comper)
 	if err := s.slider.Init(); err != nil {
 		return err
 	}

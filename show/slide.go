@@ -23,8 +23,8 @@ type slide struct {
 
 type Slider interface {
 	Init() error
+	Slides(compo string) []config.Slide
 	Validate(config.Slide) []response.ErrorItem
-	//Compos() []config.Compo
 	Create(config.Slide) error
 	//Read(string) (config.Compo, error)
 	//Update(alias string, compo config.Compo) error
@@ -53,6 +53,18 @@ func (s *slide) Init() error {
 	return nil
 }
 
+func (s *slide) Slides(compo string) []config.Slide {
+	slides := make([]config.Slide, 0)
+
+	for _, slide := range s.slides {
+		if slide.Compo == compo {
+			slides = append(slides, slide)
+		}
+	}
+
+	return slides
+}
+
 func (s *slide) Validate(slide config.Slide) []response.ErrorItem {
 	errorItems := make([]response.ErrorItem, 0)
 
@@ -60,8 +72,10 @@ func (s *slide) Validate(slide config.Slide) []response.ErrorItem {
 		errorItems = append(errorItems, response.ErrorItem{Code: "template", Message: err.Error()})
 	}
 
-	if _, err := s.comper.Read(slide.Compo); err != nil {
-		errorItems = append(errorItems, response.ErrorItem{Code: "compo", Message: err.Error()})
+	if slide.Compo != "" {
+		if _, err := s.comper.Read(slide.Compo); err != nil {
+			errorItems = append(errorItems, response.ErrorItem{Code: "compo", Message: err.Error()})
+		}
 	}
 
 	return errorItems

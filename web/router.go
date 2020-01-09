@@ -30,14 +30,15 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 	handler := newHandler(beamer, shower)
 	router := mux.NewRouter()
 
+	router.HandleFunc("/setup/templates", handler.handleTemplates)
+
 	router.HandleFunc("/setup/compos", handler.handleCompos)
 	router.HandleFunc("/setup/compo/create", handler.handleCompoCreate)
 	router.HandleFunc("/setup/compo/read/{alias}", handler.handleCompoRead)
 	router.HandleFunc("/setup/compo/update/{alias}", handler.handleCompoUpdate)
 	router.HandleFunc("/setup/compo/delete/{alias}", handler.handleCompoDelete)
 
-	router.HandleFunc("/setup/templates", handler.handleTemplates)
-
+	router.HandleFunc("/setup/slides/{compo}", handler.handleSlides)
 	router.HandleFunc("/setup/slide/create", handler.handleSlideCreate)
 
 	// Static resources

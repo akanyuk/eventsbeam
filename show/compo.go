@@ -20,8 +20,8 @@ type compo struct {
 
 type Comper interface {
 	Init() error
-	Validate(config.Compo, config.Compo) []response.ErrorItem
 	Compos() []config.Compo
+	Validate(config.Compo, config.Compo) []response.ErrorItem
 	Create(config.Compo) error
 	Read(string) (config.Compo, error)
 	Update(alias string, compo config.Compo) error
@@ -48,6 +48,10 @@ func (c *compo) Init() error {
 	return nil
 }
 
+func (c *compo) Compos() []config.Compo {
+	return c.compos
+}
+
 func (c *compo) Validate(compo config.Compo, oldCompo config.Compo) []response.ErrorItem {
 	errorItems := make([]response.ErrorItem, 0)
 
@@ -64,10 +68,6 @@ func (c *compo) Validate(compo config.Compo, oldCompo config.Compo) []response.E
 	}
 
 	return errorItems
-}
-
-func (c *compo) Compos() []config.Compo {
-	return c.compos
 }
 
 func (c *compo) Read(alias string) (config.Compo, error) {

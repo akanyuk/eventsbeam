@@ -9,7 +9,7 @@ import (
 )
 
 // swagger:operation GET /setup/compos compo handleCompos
-// Read all compos
+// Read compos
 //
 // Чтение списка всех компо.
 // ---
@@ -26,7 +26,7 @@ import (
 //     examples:
 //       application/json: [ { "alias": "zxdemo", "title": "ZX Spectrum demo", "slides": [] }, { "alias": "intro", "title": "ZX Spectrum 256 bytes intro", "slides": [] } ]
 func (h *handler) handleCompos(w http.ResponseWriter, r *http.Request) {
-	response.WriteDataResponse(w, h.shower.Comper().Compos())
+	response.WriteDataResponse(w, h.comper.Compos())
 }
 
 // swagger:operation POST /setup/compo/create compo handleCompoCreate
@@ -68,13 +68,13 @@ func (h *handler) handleCompoCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validationErrors := h.shower.Comper().Validate(compo, config.Compo{})
+	validationErrors := h.comper.Validate(compo, config.Compo{})
 	if len(validationErrors) > 0 {
 		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
 		return
 	}
 
-	if err := h.shower.Comper().Create(compo); err != nil {
+	if err := h.comper.Create(compo); err != nil {
 		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
 		return
 	}
@@ -117,7 +117,7 @@ func (h *handler) handleCompoCreate(w http.ResponseWriter, r *http.Request) {
 func (h *handler) handleCompoRead(w http.ResponseWriter, r *http.Request) {
 	alias := mux.Vars(r)["alias"]
 
-	compo, err := h.shower.Comper().Read(alias)
+	compo, err := h.comper.Read(alias)
 	if err != nil {
 		response.WriteErrorResponse(w, http.StatusNotFound, nil, err.Error())
 		return
@@ -177,19 +177,19 @@ func (h *handler) handleCompoUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	alias := mux.Vars(r)["alias"]
-	oldCompo, err := h.shower.Comper().Read(alias)
+	oldCompo, err := h.comper.Read(alias)
 	if err != nil {
 		response.WriteErrorResponse(w, http.StatusNotFound, nil, err.Error())
 		return
 	}
 
-	validationErrors := h.shower.Comper().Validate(compo, oldCompo)
+	validationErrors := h.comper.Validate(compo, oldCompo)
 	if len(validationErrors) > 0 {
 		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
 		return
 	}
 
-	if err := h.shower.Comper().Update(alias, compo); err != nil {
+	if err := h.comper.Update(alias, compo); err != nil {
 		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
 		return
 	}
@@ -249,13 +249,13 @@ func (h *handler) handleCompoDelete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	alias := mux.Vars(r)["alias"]
-	_, err = h.shower.Comper().Read(alias)
+	_, err = h.comper.Read(alias)
 	if err != nil {
 		response.WriteErrorResponse(w, http.StatusNotFound, nil, err.Error())
 		return
 	}
 
-	if err := h.shower.Comper().Delete(alias); err != nil {
+	if err := h.comper.Delete(alias); err != nil {
 		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
 		return
 	}

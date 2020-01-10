@@ -6,7 +6,7 @@ import (
 )
 
 // swagger:operation GET /setup/templates template handleTemplates
-// Read all templates
+// Read templates
 //
 // Чтение списка всех шаблонов, доступных в каталоге templates.
 // ---

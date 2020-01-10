@@ -16,13 +16,15 @@ import (
 
 type handler struct {
 	beamer beam.Beamer
-	shower show.Shower
+	comper show.Comper
+	slider show.Slider
 }
 
 func newHandler(beamer beam.Beamer, shower show.Shower) *handler {
 	return &handler{
 		beamer: beamer,
-		shower: shower,
+		comper: shower.Comper(),
+		slider: shower.Slider(),
 	}
 }
 

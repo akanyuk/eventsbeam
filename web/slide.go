@@ -33,7 +33,7 @@ import (
 func (h *handler) handleSlides(w http.ResponseWriter, r *http.Request) {
 	compo := mux.Vars(r)["compo"]
 
-	response.WriteDataResponse(w, h.shower.Slider().Slides(compo))
+	response.WriteDataResponse(w, h.slider.Slides(compo))
 }
 
 // swagger:operation POST /setup/slide/create slide handleSlideCreate
@@ -69,13 +69,13 @@ func (h *handler) handleSlideCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validationErrors := h.shower.Slider().Validate(slide)
+	validationErrors := h.slider.Validate(slide)
 	if len(validationErrors) > 0 {
 		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
 		return
 	}
 
-	if err := h.shower.Slider().Create(slide); err != nil {
+	if err := h.slider.Create(slide); err != nil {
 		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
 		return
 	}
@@ -91,7 +91,7 @@ func (h *handler) handleSlideCreate(w http.ResponseWriter, r *http.Request) {
 // parameters:
 //   - name: id
 //     in: path
-//     type: int
+//     type: integer
 //     required: true
 //     description: Идентификатор слайда
 // produces:
@@ -128,7 +128,7 @@ func (h *handler) handleSlideRead(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	compo, err := h.shower.Slider().Read(id)
+	compo, err := h.slider.Read(id)
 	if err != nil {
 		response.WriteErrorResponse(w, http.StatusNotFound, nil, err.Error())
 		return
@@ -145,7 +145,7 @@ func (h *handler) handleSlideRead(w http.ResponseWriter, r *http.Request) {
 // parameters:
 //   - name: id
 //     in: path
-//     type: int
+//     type: integer
 //     required: true
 //     description: Идентификатор слайда
 //   - name: params
@@ -193,13 +193,13 @@ func (h *handler) handleSlideUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validationErrors := h.shower.Slider().Validate(slide)
+	validationErrors := h.slider.Validate(slide)
 	if len(validationErrors) > 0 {
 		response.WriteErrorResponse(w, http.StatusOK, validationErrors, "validation error")
 		return
 	}
 
-	if err := h.shower.Slider().Update(id, slide); err != nil {
+	if err := h.slider.Update(id, slide); err != nil {
 		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
 		return
 	}
@@ -215,7 +215,7 @@ func (h *handler) handleSlideUpdate(w http.ResponseWriter, r *http.Request) {
 // parameters:
 // - name: id
 //   in: path
-//   type: int
+//   type: integer
 //   required: true
 //   description: Идентификатор слайда
 // - in: formData
@@ -264,13 +264,13 @@ func (h *handler) handleSlideDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = h.shower.Slider().Read(id)
+	_, err = h.slider.Read(id)
 	if err != nil {
 		response.WriteErrorResponse(w, http.StatusNotFound, nil, err.Error())
 		return
 	}
 
-	if err := h.shower.Slider().Delete(id); err != nil {
+	if err := h.slider.Delete(id); err != nil {
 		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
 		return
 	}

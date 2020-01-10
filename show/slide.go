@@ -28,7 +28,7 @@ type Slider interface {
 	Create(config.Slide) error
 	Read(int) (config.Slide, error)
 	Update(id int, slide config.Slide) error
-	//Delete(alias string) error
+	Delete(id int) error
 }
 
 func NewSlider(basePath string, beamer beam.Beamer, comper Comper) Slider {
@@ -122,6 +122,27 @@ func (s *slide) Update(id int, updatedSlide config.Slide) error {
 	for key, item := range s.slides {
 		if item.ID == id {
 			s.slides[key] = updatedSlide
+		}
+	}
+
+	if err := storage.SaveSlides(s.slides, s.configPath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *slide) Delete(id int) error {
+	if _, exist := s.getSlide(id); !exist {
+		return errors.New("slide not found")
+	}
+
+	s.Lock()
+	defer s.Unlock()
+
+	for key, item := range s.slides {
+		if item.ID == id {
+			s.slides = append(s.slides[:key], s.slides[key+1:]...)
 		}
 	}
 

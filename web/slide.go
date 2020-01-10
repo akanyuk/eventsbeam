@@ -206,3 +206,74 @@ func (h *handler) handleSlideUpdate(w http.ResponseWriter, r *http.Request) {
 
 	response.WriteSuccessResponse(w, nil, "slide updated")
 }
+
+// swagger:operation POST /setup/slide/delete/{id} slide handleSlideDelete
+// Delete slide
+//
+// Удаление слайда.
+// ---
+// parameters:
+// - name: id
+//   in: path
+//   type: int
+//   required: true
+//   description: Идентификатор слайда
+// - in: formData
+//   name: confirm
+//   type: boolean
+//   description: Подтверждение удаления (защита от прямых GET-запросов)
+//   required: true
+//   enum: [true]
+// produces:
+//   - application/json
+// responses:
+//   '200':
+//     description: success
+//     schema:
+//       "$ref": "#/definitions/SuccessMessage"
+//     examples:
+//       application/json: { "success": true, "message": "slide deleted", "payload": { } }
+//   '400':
+//     description: bad request
+//     schema:
+//       "$ref": "#/definitions/ErrorMessage"
+//     examples:
+//       application/json: { "success": false, "message": "request not confirmed", "errors": { } }
+//   '404':
+//     description: not found
+//     schema:
+//       "$ref": "#/definitions/ErrorMessage"
+//     examples:
+//       application/json: { "success": false, "message": "slide not found", "errors": { } }
+//   '500':
+//     description: internal error
+//     schema:
+//       "$ref": "#/definitions/ErrorMessage"
+//     examples:
+//       application/json: { "success": false, "message": "unable to save slides", "errors": { } }
+func (h *handler) handleSlideDelete(w http.ResponseWriter, r *http.Request) {
+	isConfirmed, err := strconv.ParseBool(r.FormValue("confirm"))
+	if err != nil || !isConfirmed {
+		response.WriteErrorResponse(w, http.StatusBadRequest, nil, "request not confirmed")
+		return
+	}
+
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		response.WriteErrorResponse(w, http.StatusBadRequest, nil, "wrong slide ID: %v", err.Error())
+		return
+	}
+
+	_, err = h.shower.Slider().Read(id)
+	if err != nil {
+		response.WriteErrorResponse(w, http.StatusNotFound, nil, err.Error())
+		return
+	}
+
+	if err := h.shower.Slider().Delete(id); err != nil {
+		response.WriteErrorResponse(w, http.StatusInternalServerError, nil, err.Error())
+		return
+	}
+
+	response.WriteSuccessResponse(w, nil, "slide deleted")
+}

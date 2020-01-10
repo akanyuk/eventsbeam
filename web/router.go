@@ -42,6 +42,7 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 	router.HandleFunc("/setup/slide/create", handler.handleSlideCreate)
 	router.HandleFunc("/setup/slide/read/{id}", handler.handleSlideRead)
 	router.HandleFunc("/setup/slide/update/{id}", handler.handleSlideUpdate)
+	router.HandleFunc("/setup/slide/delete/{id}", handler.handleSlideDelete)
 
 	// Static resources
 	router.HandleFunc("/openapi/swagger.json", handleOpenapi)

@@ -2,11 +2,16 @@ package beam
 
 import (
 	"TEST-LOCAL/eventsbeam/beam/config"
+	"encoding/json"
 	"errors"
+	"os"
+	"path/filepath"
 
 	"io/ioutil"
 	"sync"
 )
+
+const templateParamsFilename = "params.json"
 
 type template struct {
 	sync.RWMutex
@@ -35,13 +40,7 @@ func (t *template) Init() error {
 	t.Lock()
 	defer t.Unlock()
 
-	t.templates = make([]config.Template, 0)
-	for _, name := range templates {
-		t.templates = append(t.templates, config.Template{
-			Name: name,
-		})
-	}
-
+	t.templates = templates
 	return nil
 }
 
@@ -62,8 +61,8 @@ func (t *template) Read(name string) (config.Template, error) {
 	return config.Template{}, errors.New("template not found")
 }
 
-func getTemplates(dir string) ([]string, error) {
-	var templates []string
+func getTemplates(dir string) ([]config.Template, error) {
+	var templates []config.Template
 
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -72,9 +71,40 @@ func getTemplates(dir string) ([]string, error) {
 
 	for _, f := range files {
 		if f.IsDir() {
-			templates = append(templates, f.Name())
+			params, err := getTemplateParams(filepath.Join(dir, f.Name()))
+			if err != nil {
+				return nil, err
+			}
+
+			templates = append(templates, config.Template{
+				Name:   f.Name(),
+				Params: params,
+			})
 		}
 	}
 
 	return templates, nil
+}
+
+func getTemplateParams(dir string) (map[string]config.TemplateParam, error) {
+	filename := filepath.Join(dir, templateParamsFilename)
+
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return map[string]config.TemplateParam{}, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	template := config.Template{}
+	if err := json.Unmarshal(content, &template); err != nil {
+		return nil, err
+	}
+
+	return template.Params, nil
 }

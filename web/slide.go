@@ -100,7 +100,7 @@ func (h *handler) handleSlideCreate(w http.ResponseWriter, r *http.Request) {
 //   '200':
 //     description: success
 //     schema:
-//       AllOf:
+//       allOf:
 //       - "$ref": "#/definitions/SuccessMessage"
 //       - type: object
 //         properties:
@@ -218,14 +218,19 @@ func (h *handler) handleSlideUpdate(w http.ResponseWriter, r *http.Request) {
 //   type: integer
 //   required: true
 //   description: Идентификатор слайда
-// - in: formData
-//   name: confirm
-//   type: boolean
-//   description: Подтверждение удаления (защита от прямых GET-запросов)
+// requestBody:
 //   required: true
-//   enum: [true]
+//   content:
+//     application/x-www-form-urlencoded:
+//       type: object
+//       properties:
+//         name: confirm
+//         type: boolean
+//         description: Подтверждение удаления (защита от прямых GET-запросов)
+//         required: true
+//         enum: [true]
 // produces:
-//   - application/json
+// - application/json
 // responses:
 //   '200':
 //     description: success

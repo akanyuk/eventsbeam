@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	inputFile := flag.String("i", "../web/swagger.json", "input file")
-	outputFile := flag.String("o", "../web/swagger.json.go", "output go file")
+	inputFile := flag.String("i", "../openapi.yaml", "input file")
+	outputFile := flag.String("o", "../web/openapi.yaml.go", "output go file")
 	flag.Parse()
 
 	inputData, err := ioutil.ReadFile(*inputFile)

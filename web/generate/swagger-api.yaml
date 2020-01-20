@@ -1,8 +1,6 @@
 swagger: "2.0"
 host: localhost
 basePath: /
-consumes:
-  - application/json
 produces:
   - application/json
 schemes:

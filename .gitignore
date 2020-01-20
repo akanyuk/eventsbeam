@@ -1,5 +1,5 @@
 .idea/
 .build/
 
-web/swagger.json
-web/swagger.json.go
+openapi.yaml
+web/openapi.yaml.go

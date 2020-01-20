@@ -47,10 +47,10 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 	router.HandleFunc("/setup/slide/delete/{id}", handler.handleSlideDelete)
 
 	// Static resources
-	router.HandleFunc("/openapi/swagger.json", handleOpenapi)
-	router.PathPrefix("/openapi").Handler(http.StripPrefix("/openapi", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "openapi")))))
-	router.PathPrefix("/setup").Handler(http.StripPrefix("/setup", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "setup")))))
-	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "static", "control")))))
+	router.HandleFunc("/openapi.yaml", handleOpenapi)
+	router.PathPrefix("/openapi").Handler(http.StripPrefix("/openapi", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "app/static", "openapi")))))
+	router.PathPrefix("/setup").Handler(http.StripPrefix("/setup", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "app/static", "setup")))))
+	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "app/static", "control")))))
 	http.Handle("/", router)
 	router.Use(handleMiddleware)
 

@@ -11,6 +11,10 @@ type Slide struct {
 	// Идентификатор компо. Если не указано, то используется глобальный список слайдов.
 	// Example: zxdemo
 	Compo string `json:"compo"`
+	// Наименование слайда
+	// Required: true
+	// Example: Demo entry
+	Title string `json:"title"`
 	// Имя шаблона, имеющегося в системе
 	// Required: true
 	// Example: ansi

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"TEST-LOCAL/eventsbeam/web/response"
+	"bitbucket.org/nyuk/eventsbeam/web/response"
 	"net/http"
 )
 

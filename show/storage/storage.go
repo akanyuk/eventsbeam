@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"TEST-LOCAL/eventsbeam/show/config"
+	"bitbucket.org/nyuk/eventsbeam/show/config"
 
 	"gopkg.in/yaml.v2"
 

@@ -1,7 +1,7 @@
 package beam
 
 import (
-	"TEST-LOCAL/eventsbeam/beam/config"
+	"bitbucket.org/nyuk/eventsbeam/beam/config"
 	"encoding/json"
 	"errors"
 	"os"

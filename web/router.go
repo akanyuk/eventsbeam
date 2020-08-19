@@ -1,10 +1,10 @@
 package web
 
 import (
-	"TEST-LOCAL/eventsbeam/beam"
-	"TEST-LOCAL/eventsbeam/configuration"
-	"TEST-LOCAL/eventsbeam/kit"
-	"TEST-LOCAL/eventsbeam/show"
+	"bitbucket.org/nyuk/eventsbeam/beam"
+	"bitbucket.org/nyuk/eventsbeam/configuration"
+	"bitbucket.org/nyuk/eventsbeam/kit"
+	"bitbucket.org/nyuk/eventsbeam/show"
 
 	"github.com/gorilla/mux"
 

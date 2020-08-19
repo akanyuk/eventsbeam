@@ -1,9 +1,9 @@
 package main
 
 import (
-	"TEST-LOCAL/eventsbeam/beam"
-	"TEST-LOCAL/eventsbeam/show"
-	"TEST-LOCAL/eventsbeam/web"
+	"bitbucket.org/nyuk/eventsbeam/beam"
+	"bitbucket.org/nyuk/eventsbeam/show"
+	"bitbucket.org/nyuk/eventsbeam/web"
 
 	"fmt"
 	"log"

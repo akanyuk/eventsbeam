@@ -1,9 +1,9 @@
 package beam
 
 import (
-	"TEST-LOCAL/eventsbeam/beam/config"
 	"encoding/json"
 	"errors"
+	"github.com/akanyuk/eventsbeam/beam/config"
 	"os"
 	"path/filepath"
 

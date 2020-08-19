@@ -1,11 +1,11 @@
 package show
 
 import (
-	"TEST-LOCAL/eventsbeam/beam"
-	"TEST-LOCAL/eventsbeam/show/config"
-	"TEST-LOCAL/eventsbeam/show/storage"
-	"TEST-LOCAL/eventsbeam/web/response"
 	"errors"
+	"github.com/akanyuk/eventsbeam/beam"
+	"github.com/akanyuk/eventsbeam/show/config"
+	"github.com/akanyuk/eventsbeam/show/storage"
+	"github.com/akanyuk/eventsbeam/web/response"
 	"path/filepath"
 	"sync"
 )

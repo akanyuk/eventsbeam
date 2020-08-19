@@ -1,11 +1,12 @@
-module TEST-LOCAL/eventsbeam
+module github.com/akanyuk/eventsbeam
+
+go 1.14
 
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/asticode/go-astilectron v0.9.0
 	github.com/asticode/go-astilog v1.1.0 // indirect
 	github.com/asticode/go-astitools v1.2.0 // indirect
-	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.3
 	github.com/jinzhu/configor v1.1.1
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
@@ -19,5 +20,3 @@ require (
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.2.2
 )
-
-go 1.13

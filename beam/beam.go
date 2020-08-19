@@ -1,9 +1,9 @@
 package beam
 
 import (
-	"TEST-LOCAL/eventsbeam/beam/config"
-	"TEST-LOCAL/eventsbeam/configuration"
-	"TEST-LOCAL/eventsbeam/kit"
+	"github.com/akanyuk/eventsbeam/beam/config"
+	"github.com/akanyuk/eventsbeam/configuration"
+	"github.com/akanyuk/eventsbeam/kit"
 
 	"github.com/asticode/go-astilectron"
 

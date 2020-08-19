@@ -1,8 +1,8 @@
 package show
 
 import (
-	"TEST-LOCAL/eventsbeam/beam"
-	"TEST-LOCAL/eventsbeam/kit"
+	"github.com/akanyuk/eventsbeam/beam"
+	"github.com/akanyuk/eventsbeam/kit"
 
 	"path/filepath"
 )

@@ -39,7 +39,7 @@ func addFlagByField(field reflect.Value, flagName string, defaultValue string, u
 		flag.Int(flagName, int(value), usageValue)
 	case reflect.Float32, reflect.Float64:
 		value, _ := strconv.ParseFloat(defaultValue, int(field.Type().Size()))
-		flag.Float64(flagName, float64(value), usageValue)
+		flag.Float64(flagName, value, usageValue)
 	}
 }
 
@@ -147,7 +147,7 @@ func setDefaultValuesToStruct(config interface{}, prefixes ...string) error {
 		for field.Kind() == reflect.Ptr {
 			field = field.Elem()
 		}
-		setDefaultValue(field, fieldStruct, prefixes...)
+		_ = setDefaultValue(field, fieldStruct, prefixes...)
 
 		if field.Kind() == reflect.Struct {
 			if err := setDefaultValuesToStruct(field.Addr().Interface(), getPrefixForStruct(prefixes, &fieldStruct)...); err != nil {
@@ -224,7 +224,7 @@ func getConfigFileName(defaultFileName string) string {
 }
 
 func exportDefaultConfigFile(config interface{}, configFileName string) error {
-	setDefaultValuesToStruct(config)
+	_ = setDefaultValuesToStruct(config)
 	var buffer bytes.Buffer
 	if err := toml.NewEncoder(&buffer).Encode(config); err != nil {
 		return err
@@ -261,14 +261,14 @@ func Load(config interface{}, file string) error {
 
 	configFilePath := normaliseFilePath(file)
 
-	setCommonFlags(configFilePath)
+	_ = setCommonFlags(configFilePath)
 
 	flag.Parse()
 	if err := checkCommonFlags(config, getConfigFileName(configFilePath)); err != nil {
 		return err
 	}
 
-	configor.Load(config, getConfigFileName(configFilePath))
+	_ = configor.Load(config, getConfigFileName(configFilePath))
 
 	if err := exportChangesFlagsToConfig(config); err != nil {
 		return err

@@ -3,7 +3,7 @@ package beam
 import (
 	"encoding/json"
 	"errors"
-	"github.com/akanyuk/eventsbeam/beam/config"
+	"github.com/akanyuk/eventsbeam/internal/beam/config"
 	"os"
 	"path/filepath"
 

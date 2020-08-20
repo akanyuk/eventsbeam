@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/akanyuk/eventsbeam/show/config"
+	"github.com/akanyuk/eventsbeam/internal/show/config"
 	"github.com/akanyuk/eventsbeam/web/response"
 	"github.com/gorilla/mux"
 	"net/http"

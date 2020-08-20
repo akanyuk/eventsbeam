@@ -1,8 +1,8 @@
 package show
 
 import (
-	"github.com/akanyuk/eventsbeam/beam"
-	"github.com/akanyuk/eventsbeam/kit"
+	"github.com/akanyuk/eventsbeam/internal/beam"
+	"github.com/akanyuk/eventsbeam/internal/support"
 
 	"path/filepath"
 )
@@ -21,7 +21,7 @@ type Shower interface {
 
 func NewShower(basePath string) Shower {
 	return &show{
-		basePath: filepath.Join(kit.ExecutablePath(), basePath),
+		basePath: filepath.Join(support.ExecutablePath(), basePath),
 	}
 }
 

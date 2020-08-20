@@ -2,9 +2,9 @@ package show
 
 import (
 	"errors"
-	"github.com/akanyuk/eventsbeam/beam"
-	"github.com/akanyuk/eventsbeam/show/config"
-	"github.com/akanyuk/eventsbeam/show/storage"
+	"github.com/akanyuk/eventsbeam/internal/beam"
+	"github.com/akanyuk/eventsbeam/internal/show/config"
+	"github.com/akanyuk/eventsbeam/internal/show/storage"
 	"github.com/akanyuk/eventsbeam/web/response"
 	"path/filepath"
 	"sync"

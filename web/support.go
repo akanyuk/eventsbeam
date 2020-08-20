@@ -2,7 +2,7 @@ package web
 
 import (
 	"encoding/json"
-	"github.com/akanyuk/eventsbeam/show/config"
+	"github.com/akanyuk/eventsbeam/internal/show/config"
 	"log"
 	"net/http"
 )

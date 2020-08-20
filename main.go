@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/akanyuk/eventsbeam/beam"
 	"github.com/akanyuk/eventsbeam/configuration"
-	"github.com/akanyuk/eventsbeam/show"
+	"github.com/akanyuk/eventsbeam/internal/beam"
+	"github.com/akanyuk/eventsbeam/internal/show"
 	"github.com/akanyuk/eventsbeam/web"
 
 	"fmt"

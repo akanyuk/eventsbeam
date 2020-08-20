@@ -1,9 +1,9 @@
 package beam
 
 import (
-	"github.com/akanyuk/eventsbeam/beam/config"
 	"github.com/akanyuk/eventsbeam/configuration"
-	"github.com/akanyuk/eventsbeam/kit"
+	"github.com/akanyuk/eventsbeam/internal/beam/config"
+	"github.com/akanyuk/eventsbeam/internal/support"
 
 	"github.com/asticode/go-astilectron"
 
@@ -42,7 +42,7 @@ func (b *beam) Init(appName string) error {
 		// BaseDirectoryPath:  b.basePath,
 		VersionAstilectron: configuration.Service.VersionAstilectron,
 		VersionElectron:    configuration.Service.VersionElectron,
-		AppIconDefaultPath: filepath.Join(kit.ExecutablePath(), "app", "icon-32x32.png"),
+		AppIconDefaultPath: filepath.Join(support.ExecutablePath(), "app", "icon-32x32.png"),
 		// AppIconDarwinPath:  "<your .icns icon>", // Same here
 	})
 	if err != nil {

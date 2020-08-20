@@ -43,10 +43,25 @@ gen-swagger: vendor ## Generate swagger.json from CI
 	mkdir -p ./web/static/sources
 	go run ./generators/swagger/swagger.go
 
+generate-web-proto: vendor ## Generate pr.go for api generation plugin
+	protoc --proto_path=./cmd/protoc-gen-web/proto/web --go_out=./cmd/protoc-gen-web/proto/web web.proto
+	cp ./cmd/protoc-gen-web/proto/web/*.proto ./api/
+
+build-protoc-gen-web-windows: vendor ## Build api generation plugin
+	mkdir -p ./api
+	env GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc go build -o protoc-gen-web.exe ./cmd/protoc-gen-web/
+
+generate-api: generate-web-proto build-protoc-gen-web-windows ## Generate API
+	protoc -I=cmd/protoc-gen-web/proto/web --proto_path=./api --web_out=./api --go_out=./api api.proto
+	rm ./protoc-gen-web.exe || true
+
 clean: ## Remove vendor and artifacts
 	rm -rf vendor
 	rm -rf $(BUILD_FOLDER)/linux
 	rm -rf $(BUILD_FOLDER)/windows
+
+	rm ./api/web.proto || true
+	rm ./api/descriptor.proto || true
 
 help: ## Display available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' 

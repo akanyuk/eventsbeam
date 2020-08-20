@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+import "web.proto";
+
+package api;
+
+option go_package = "api";
+
+service EventsConfigurator {
+    rpc EventLevels (EmptyRequest) returns (EventLevelsResponse) {
+        option (web.handler) = {
+            get: "/event_levels"
+            description: "Список уровней событий"
+        };
+    }
+}
+
+// swagger:model
+message EventLevel {
+    // Идентификатор записи
+    // required: true
+    // example: 2
+    int32 id = 1;
+    // Код
+    // required: true
+    // example: info
+    string code = 2;
+    // Название
+    // required: true
+    // example: Информация
+    string name = 3;
+    // Цвет
+    // example: info-circle
+    string color = 4;
+}
+
+// swagger:model
+message EventType {
+    // Идентификатор записи
+    // required: true
+    // example: 2
+    int32 id = 1;
+    // Код
+    // required: true
+    // example: info
+    string code = 2;
+    // Название
+    // required: true
+    // example: Информация
+    string name = 3;
+    // Цвет
+    // example: info-circle
+    string color = 4;
+    // Иконка
+    // example: #d1c3e0
+    string icon = 5;
+}
+
+
+message EmptyRequest {
+}
+
+// swagger:model
+message EventLevelsResponse {
+    // required: true
+    repeated EventLevel items = 1;
+}
+
+// swagger:model
+message EventTypesResponse {
+    // required: true
+    repeated EventType items = 1;
+}

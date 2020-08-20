@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package web;
+
+import "descriptor.proto";
+
+extend google.protobuf.MethodOptions {
+    Handler handler = 51788;
+}
+
+message Handler {
+    oneof pattern {
+        string get = 1;
+        string put = 2;
+        string post = 3;
+        string delete = 4;
+        string patch = 5;
+    }
+    string title = 6;
+    string description = 7;
+
+    repeated Parameter parameters = 8;
+}
+
+message Parameter {
+    oneof description {
+        string path = 1;
+        string body = 2;
+    }
+    string name = 3;
+}

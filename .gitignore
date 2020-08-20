@@ -3,5 +3,9 @@
 /vendor
 
 # generated resources
+/api/protoc-gen-eventsbeam.exe
+/api/web.proto
+/api/descriptor.proto
+
 /web/static/sources/swagger.json
 /web/static-gen.go

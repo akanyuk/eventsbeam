@@ -3,7 +3,6 @@ package web
 import (
 	"github.com/akanyuk/eventsbeam/beam"
 	"github.com/akanyuk/eventsbeam/configuration"
-	"github.com/akanyuk/eventsbeam/kit"
 	"github.com/akanyuk/eventsbeam/show"
 
 	"github.com/gorilla/mux"
@@ -11,8 +10,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"path/filepath"
 )
+
+type staticResource struct {
+	path string
+	f    func(http.ResponseWriter, *http.Request)
+}
+
+var staticResources []staticResource
 
 type handler struct {
 	beamer beam.Beamer
@@ -30,7 +35,7 @@ func newHandler(beamer beam.Beamer, shower show.Shower) *handler {
 
 func Start(beamer beam.Beamer, shower show.Shower) {
 	handler := newHandler(beamer, shower)
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/setup/templates", handler.handleTemplates)
 
@@ -46,13 +51,14 @@ func Start(beamer beam.Beamer, shower show.Shower) {
 	router.HandleFunc("/setup/slide/update/{id}", handler.handleSlideUpdate)
 	router.HandleFunc("/setup/slide/delete/{id}", handler.handleSlideDelete)
 
-	// Static resources
-	router.HandleFunc("/openapi.yaml", handleOpenapi)
-	router.PathPrefix("/openapi").Handler(http.StripPrefix("/openapi", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "app/static", "openapi")))))
-	router.PathPrefix("/setup").Handler(http.StripPrefix("/setup", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "app/static", "setup")))))
-	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir(filepath.Join(kit.ExecutablePath(), "app/static", "control")))))
-	http.Handle("/", router)
+	// Adding generated static resources
+	for _, resource := range staticResources {
+		router.HandleFunc(resource.path, resource.f)
+	}
+
 	router.Use(handleMiddleware)
+
+	http.Handle("/", router)
 
 	fmt.Printf("beam control starting at: %s\n", configuration.Service.BindAddress)
 
@@ -78,9 +84,4 @@ func handleMiddleware(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
-}
-
-func handleOpenapi(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json;charset=utf-8")
-	_, _ = w.Write(swaggerJson)
 }

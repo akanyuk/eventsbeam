@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/akanyuk/eventsbeam/beam"
+	"github.com/akanyuk/eventsbeam/configuration"
 	"github.com/akanyuk/eventsbeam/show"
 	"github.com/akanyuk/eventsbeam/web"
 
@@ -10,6 +11,8 @@ import (
 )
 
 func main() {
+	configuration.Init()
+
 	beamer := beam.NewBeamer()
 	if err := beamer.Init("EventsBeam"); err != nil {
 		log.Fatalf("unable to initialize beamer: %v\n", err)

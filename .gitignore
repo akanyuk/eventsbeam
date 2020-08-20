@@ -1,5 +1,7 @@
 .idea/
 .build/
+/vendor
 
-openapi.yaml
-web/openapi.yaml.go
+# generated resources
+/web/static/sources/swagger.json
+/web/static-gen.go

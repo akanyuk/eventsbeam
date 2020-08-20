@@ -39,11 +39,11 @@ func NewBeamer() Beamer {
 func (b *beam) Init(appName string) error {
 	asti, err := astilectron.New(astilectron.Options{
 		AppName: appName,
-		//BaseDirectoryPath:  b.basePath,
+		// BaseDirectoryPath:  b.basePath,
 		VersionAstilectron: configuration.Service.VersionAstilectron,
 		VersionElectron:    configuration.Service.VersionElectron,
 		AppIconDefaultPath: filepath.Join(kit.ExecutablePath(), "app", "icon-32x32.png"),
-		//AppIconDarwinPath:  "<your .icns icon>", // Same here
+		// AppIconDarwinPath:  "<your .icns icon>", // Same here
 	})
 	if err != nil {
 		return err
@@ -60,11 +60,12 @@ func (b *beam) Init(appName string) error {
 		return err
 	}
 
-	for _, template := range b.Templates() {
-		if err := b.addWindow(template.Name); err != nil {
-			return err
-		}
-	}
+	// Перестало работать
+	// for _, template := range b.Templates() {
+	// 	if err := b.addWindow(template.Name); err != nil {
+	// 		return err
+	// 	}
+	// }
 
 	if configuration.Service.Display > 0 {
 		b.setDisplay(configuration.Service.Display)

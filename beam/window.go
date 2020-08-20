@@ -1,7 +1,6 @@
 package beam
 
 import (
-	"fmt"
 	"github.com/akanyuk/eventsbeam/configuration"
 	"github.com/asticode/go-astilectron"
 	"path/filepath"
@@ -19,8 +18,6 @@ func newWindow(b *beam, alias string) (*window, error) {
 	if configuration.Service.Debug > 0 {
 		alwaysOnTop = false
 		frameWindow = false
-
-		fmt.Printf("\033[1;35m debug mode\033[0m\n")
 	}
 
 	var w, err = b.asti.NewWindow(filepath.Join(b.asti.Paths().BaseDirectory(), "templates", alias, "index.html"), &astilectron.WindowOptions{

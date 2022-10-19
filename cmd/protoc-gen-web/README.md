@@ -64,7 +64,3 @@ message Dummy {}
 ```cmd
 protoc --proto_path=. --micro_out=. --pbweb_out=. --go_out=. sounds.proto
 ```
-
-### Подробнее
-
-Более подробно с настройкой генерации можно ознакомиться на примере [sounds_api](https://git.sedmax.ru/BACKEND/sounds_api). 
